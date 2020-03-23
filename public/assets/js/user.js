@@ -13,6 +13,8 @@ $.ajax({
 function render() {
     let html = template("userTpl", { data: userArr })
     $("tbody").html(html)
+    // 隐藏批量删除按钮
+    $("#delMany").hide()
 }
 // 上传头像的功能
 // 这段代码是将图片上传到服务器了, 在完成用户添加功能是, 还需要将图片地址写入数据库
@@ -189,6 +191,71 @@ $("tbody").on("click", ".delete", function() {
             url: "/users/" + id,
             success(response) {
                 userArr = userArr.filter(item => item._id != response._id)
+                render()
+            },
+        })
+    }
+})
+// 全选按钮, 让所有用户的复选框与全选按钮保持一致
+$("#selectAll").on("change", function() {
+    // 获取全选按钮的选中状态
+    let status = $(this).prop("checked")
+    // 获取所有的用户, 与全选按钮的选中状态一致
+    $("tbody")
+        .find("input")
+        .prop("checked", status)
+    // 显示隐藏批量删除按钮
+    if (status) $("#delMany").show()
+    else $("#delMany").hide()
+})
+// 当所有复选框被选中时全选被选中
+$("tbody").on("change", "input", function() {
+    // 获取所有选中的用户，如果数量与总用户数量相同，全选就选中
+    if (
+        $("tbody")
+            .find("input")
+            .filter(":checked").length == userArr.length
+    ) {
+        $("#selectAll").prop("checked", true)
+    } else {
+        $("#selectAll").prop("checked", false)
+    }
+    // 显示隐藏批量删除按钮
+    if (
+        $("tbody")
+            .find("input")
+            .filter(":checked").length > 1
+    )
+        $("#delMany").show()
+    else $("#delMany").hide()
+})
+// 批量删除按钮
+$("#delMany").on("click", function() {
+    if (confirm("确定删除吗？")) {
+        let selectedArr = []
+        // console.log($("tbody input:checked").length)
+        // 获取被选中元素的id, push到selectedArr数组中
+        $("tbody input:checked").each((index, item) => {
+            selectedArr.push(
+                $(item)
+                    .parent()
+                    .parent()
+                    .find(".delete")
+                    .attr("data-id"),
+            )
+        })
+        // console.log(selectedArr) 获取成功
+        // 发送请求
+        $.ajax({
+            type: "delete",
+            url: "/users/" + selectedArr.join("-"),
+            // 如果请求成功会返回一个包含所有被删除的用户的数组
+            success(response) {
+                // 遍历这个数组
+                response.forEach(delItem => {
+                    // 去掉用户数组中被删除的用户
+                    userArr = userArr.filter(item => item._id != delItem._id)
+                })
                 render()
             },
         })
