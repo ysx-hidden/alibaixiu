@@ -180,3 +180,17 @@ $("#editBtn").on("click", function() {
         },
     })
 })
+// 删除单个用户
+$("tbody").on("click", ".delete", function() {
+    let id = $(this).attr("data-id")
+    if (confirm("确认删除吗？")) {
+        $.ajax({
+            type: "delete",
+            url: "/users/" + id,
+            success(response) {
+                userArr = userArr.filter(item => item._id != response._id)
+                render()
+            },
+        })
+    }
+})
