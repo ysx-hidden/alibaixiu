@@ -41,7 +41,7 @@
                 <form class="row">
                     <div class="col-md-9">
                         <div class="form-group">
-                            <label for="title">标题</label>
+                            <label for="title">文章标题</label>
                             <input
                                 id="title"
                                 class="form-control input-lg"
@@ -51,7 +51,7 @@
                             />
                         </div>
                         <div class="form-group">
-                            <label for="content">标题</label>
+                            <label for="content">内容</label>
                             <textarea
                                 id="content"
                                 class="form-control input-lg"
@@ -68,27 +68,26 @@
                             <!-- show when image chose -->
                             <img class="help-block thumbnail" style="display: none" />
                             <input id="feature" class="form-control" name="feature" type="file" />
+                            <!-- 保存图片地址的隐藏域 -->
+                            <input type="hidden" name="thumbnail" id="hiddenSrc" />
                         </div>
                         <div class="form-group">
                             <label for="category">所属分类</label>
-                            <select id="category" class="form-control" name="category">
-                                <option value="1">未分类</option>
-                                <option value="2">潮生活</option>
-                            </select>
+                            <select id="category" class="form-control" name="category"> </select>
                         </div>
                         <div class="form-group">
                             <label for="created">发布时间</label>
-                            <input id="created" class="form-control" name="created" type="datetime-local" />
+                            <input id="created" class="form-control" name="creatAt" type="datetime-local" />
                         </div>
                         <div class="form-group">
                             <label for="status">状态</label>
-                            <select id="status" class="form-control" name="status">
-                                <option value="drafted">草稿</option>
-                                <option value="published">已发布</option>
+                            <select id="status" class="form-control" name="state">
+                                <option value="0">草稿</option>
+                                <option value="1">已发布</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-primary" type="submit">保存</button>
+                            <button class="btn btn-primary" type="button" id="publishBtn">发布</button>
                         </div>
                     </div>
                 </form>
@@ -134,10 +133,16 @@
 
         <script src="../assets/vendors/jquery/jquery.js"></script>
         <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+        <script src="../assets/vendors/art-template/template-web.js"></script>
         <script src="../assets/js/post-add.js"></script>
         <script>
             NProgress.done()
         </script>
         <script src="../assets/js/common.js"></script>
+        <script type="text/html" id="postAddTpl">
+            {{each data}}
+            <option value="{{@$value._id}}">{{$value.title}}</option>
+            {{/each}}
+        </script>
     </body>
 </html>
