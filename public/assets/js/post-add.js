@@ -30,14 +30,14 @@ $("#feature").on("change", function() {
 })
 // 文章添加功能
 $("#publishBtn").on("click", function() {
-    console.log(1)
     let data = $("form").serialize()
+    console.log(data)
     $.ajax({
         type: "post",
         url: "/posts",
         data,
         success(response) {
-            location.href = "posts.html"
+            // location.href = "posts.html"
         },
     })
 })

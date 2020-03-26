@@ -37,7 +37,7 @@ $("#addBtn").on("click", function() {
         success(response) {
             // 存到分类数组中
             categoryArr.push(response)
-            console.log(categoryArr)
+            // console.log(categoryArr)
             render()
             // 清空
             $('[name="title"]').val("")
@@ -155,7 +155,7 @@ $("#delMany").on("click", function() {
                     .attr("data-id"),
             )
         })
-        console.log(selectedArr) // 获取成功
+        // console.log(selectedArr) // 获取成功
         // 发送请求
         $.ajax({
             type: "delete",
