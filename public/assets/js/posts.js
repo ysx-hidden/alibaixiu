@@ -25,7 +25,7 @@ function render(category, state, page = 1) {
     })
 }
 // 第一次打开页面/刷新页面渲染到页码为1
-render(category, state)
+render(category, state, currentPage)
 // 点击页码的函数(标签中的onclick事件)
 function changePage(index) {
     // $.ajax({
@@ -87,6 +87,10 @@ $("tbody").on("click", ".delete", function() {
             type: "delete",
             url: "/posts/" + id,
             success(response) {
+                // 如果当前页的文章被删完了，就去到上一页
+                if ($("tbody tr").length == 1 && currentPage != 1) {
+                    render(category, state, --currentPage)
+                }
                 render(category, state, currentPage)
             },
         })
