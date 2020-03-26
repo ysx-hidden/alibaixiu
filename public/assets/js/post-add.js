@@ -37,7 +37,69 @@ $("#publishBtn").on("click", function() {
         url: "/posts",
         data,
         success(response) {
-            // location.href = "posts.html"
+            location.href = "posts.html"
+        },
+    })
+})
+// 从浏览器地址栏中获取查询参数
+function getUrlParams(name) {
+    // console.log(location.search.substr(1).split("&"))
+    let params = location.search.substr(1).split("&")
+    // 去掉等于号
+    for (let i = 0; i < params.length; i++) {
+        let tmp = params[i].split("=")
+        if (tmp[0] == name) return tmp[1]
+    }
+    return -1
+}
+// 如果点击编辑按钮跳转到此页面, 就会有id, 否则返回-1
+// console.log(getUrlParams("id"))
+let id = getUrlParams("id")
+// 文章编辑功能
+if (id != -1) {
+    $("#editBtn").show()
+    $("#publishBtn").hide()
+    $.ajax({
+        type: "get",
+        url: "/posts/" + id,
+        success(response) {
+            // console.log(response)
+            $("h1").text("编辑文章")
+            $("#title").val(response.title)
+            $("#content").val(response.content)
+            // 图片
+            $(".thumbnail")
+                .attr("src", response.thumbnail)
+                .show()
+            // 隐藏域
+            $("#hidden").val(response.thumbnail)
+            // 日期
+            $("#created").val(response.createAt.substr(0, 16))
+            // 分类
+            $("#category option").each(function(index, item) {
+                // console.log(item)
+                // console.log($(item).attr("value"))
+                if ($(item).attr("value") == response.category._id) {
+                    $(item).prop("selected", true)
+                }
+            })
+            // 状态
+            $("#status option").each(function(index, item) {
+                if ($(item).attr("value") == response.state) {
+                    $(item).prop("selected", true)
+                }
+            })
+        },
+    })
+}
+$("#editBtn").on("click", function() {
+    let data = $("form").serialize()
+    $.ajax({
+        type: "put",
+        url: "/posts/" + id,
+        data,
+        success(response) {
+            location.href = "posts.html"
         },
     })
 })

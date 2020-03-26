@@ -1,5 +1,6 @@
 let category = $("#category").val()
 let state = $("#state").val()
+let currentPage = 1
 // 代码重复，定义render函数
 // category文章类的id  state文章是草稿还是已发布  page页码
 function render(category, state, page = 1) {
@@ -43,6 +44,7 @@ function changePage(index) {
     //         $(".pagination").html(pagesHtml)
     //     },
     // })
+    currentPage = index
     render(category, state, index)
 }
 // 获取所有文章分类, 渲染下拉菜单
@@ -75,4 +77,18 @@ $("#searchBtn").on("click", function() {
     //     },
     // })
     render(category, state)
+})
+// 删除功能
+$("tbody").on("click", ".delete", function() {
+    if (confirm("确定要删除吗？")) {
+        // console.log($(this).attr("data-id"))
+        let id = $(this).attr("data-id")
+        $.ajax({
+            type: "delete",
+            url: "/posts/" + id,
+            success(response) {
+                render(category, state, currentPage)
+            },
+        })
+    }
 })
