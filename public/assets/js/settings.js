@@ -26,7 +26,7 @@ $("#saveBtn").on("click", function() {
     $("#review").val($("#comment_reviewed").prop("checked"))
     // 获取表单中的内容, 有name属性的才会收集
     let formData = $("#settingsForm").serialize()
-    console.log(formData)
+    // console.log(formData)
     $.ajax({
         type: "post",
         url: "/settings",
@@ -41,8 +41,8 @@ $.ajax({
     type: "get",
     url: "/settings",
     success(response) {
-        console.log(response)
-        console.log($('input[name="description"]')[0])
+        // console.log(response)
+        // console.log($('input[name="description"]')[0])
         if (response) {
             // 将logo地址存储在隐藏域中
             $("#hiddenLogo").val(response.logo)

@@ -13,3 +13,13 @@ $("#logout").on("click", function() {
         })
     }
 })
+// 获取登录用户的信息
+$.ajax({
+    type: "get",
+    url: "/users/" + userId,
+    success(response) {
+        // console.log(response)
+        $(".avatar").attr("src", response.avatar)
+        $(".profile .name").html(response.nickName)
+    },
+})
